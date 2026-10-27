@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.*
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,9 +55,12 @@ fun LauncherScreen() {
         if (query.isBlank()) apps else apps.filter { it.label.contains(query, ignoreCase = true) }
     }
 
-    Box(Modifier.fillMaxSize()) {
-        WallpaperBackground()
-        Column(Modifier.fillMaxSize().padding(12.dp)) {
+    val darkTheme = isSystemInDarkTheme()
+    val colorScheme = if (darkTheme) dynamicDarkColorScheme(LocalContext.current) else dynamicLightColorScheme(LocalContext.current)
+    MaterialTheme(colorScheme = colorScheme) {
+        Box(Modifier.fillMaxSize()) {
+            WallpaperBackground()
+            Column(Modifier.fillMaxSize().padding(12.dp)) {
             OutlinedTextField(
                 value = query,
                 onValueChange = { query = it },
@@ -71,6 +76,7 @@ fun LauncherScreen() {
             }
         }
     }
+}
 }
 
 @Composable
